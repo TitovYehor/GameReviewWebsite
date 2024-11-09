@@ -1,6 +1,45 @@
-﻿@{
-    ViewData["Title"] = "Game List Page";
-}
+﻿@model IEnumerable<GameReviewWebsite.Models.Game>
 
 <h1>All Games</h1>
-<p>List of games with search and filter options will go here.</p>
+
+<form method="get" asp-action="List" asp-controller="Games">
+    <input type="text" name="searchString" placeholder="Search by title" value="@Context.Request.Query["searchString"]" />
+    <select name="genre">
+        <option value="">All Genres</option>
+        <option value="Action">Action</option>
+        <option value="Adventure">Adventure</option>
+        <option value="Puzzle">Puzzle</option>
+    </select>
+    <input type="number" step="0.1" name="minRating" placeholder="Min Rating" value="@Context.Request.Query["minRating"]" />
+    <button type="submit">Search</button>
+</form>
+
+<div>
+    <strong>Sort by:</strong>
+    <a asp-action="List" asp-route-sortOrder="title_asc">Title (A-Z)</a> |
+    <a asp-action="List" asp-route-sortOrder="title_desc">Title (Z-A)</a> |
+    <a asp-action="List" asp-route-sortOrder="date_asc">Release Date (Oldest)</a> |
+    <a asp-action="List" asp-route-sortOrder="date_desc">Release Date (Newest)</a> |
+    <a asp-action="List" asp-route-sortOrder="rating_asc">Rating (Low to High)</a> |
+    <a asp-action="List" asp-route-sortOrder="rating_desc">Rating (High to Low)</a>
+</div>
+
+<table>
+    <tr>
+        <th>Title</th>
+        <th>Genre</th>
+        <th>Release Date</th>
+        <th>Rating</th>
+        <th>Details</th>
+    </tr>
+    @foreach (var game in Model)
+    {
+        <tr>
+            <td>@game.Title</td>
+            <td>@game.Genre</td>
+            <td>@game.ReleaseDate.ToString("yyyy-MM-dd")</td>
+            <td>@game.Rating</td>
+            <td><a href="@Url.Action("Detail", "Games", new { id = game.Id })">View Details</a></td>
+        </tr>
+    }
+</table>

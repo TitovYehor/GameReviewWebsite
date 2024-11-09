@@ -1,6 +1,8 @@
-﻿@{
-    ViewData["Title"] = "Game Detail Page";
-}
+﻿@model GameReviewWebsite.Models.Game
 
-<h1>Game Details</h1>
-<p>Details about the specific game, including reviews and ratings, will be shown here.</p>
+<h1>@Model.Title</h1>
+<p><strong>Genre:</strong> @Model.Genre</p>
+<p><strong>Release Date:</strong> @Model.ReleaseDate.ToString("yyyy-MM-dd")</p>
+<p><strong>Rating:</strong> @Model.Rating</p>
+<p><strong>Description:</strong> @Model.Description</p>
+<a href="@Url.Action("List", "Games")">Back to Game List</a>
