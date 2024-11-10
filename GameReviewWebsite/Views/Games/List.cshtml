@@ -43,3 +43,10 @@
         </tr>
     }
 </table>
+
+@if (User.Identity.IsAuthenticated)
+{
+    <li class="nav-item">
+        <a class="nav-link" asp-controller="Games" asp-action="Create">Add New Game</a>
+    </li>
+}

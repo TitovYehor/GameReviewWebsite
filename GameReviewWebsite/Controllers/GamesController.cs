@@ -3,6 +3,7 @@ using GameReviewWebsite.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GameReviewWebsite.Controllers
 {
@@ -15,19 +16,26 @@ namespace GameReviewWebsite.Controllers
             _context = context;
         }
 
-        //private List<Game> games = new List<Game>
-        //{
-        //    new Game { Id = 1, Title = "Game 1", Genre = "Action", ReleaseDate = new DateTime(2021, 1, 1), Rating = 4.5, Description = "Exciting action game." },
-        //    new Game { Id = 2, Title = "Game 2", Genre = "Adventure", ReleaseDate = new DateTime(2022, 5, 3), Rating = 4.2, Description = "Immersive adventure game." },
-        //    new Game { Id = 3, Title = "Game 3", Genre = "Puzzle", ReleaseDate = new DateTime(2020, 3, 15), Rating = 4.8, Description = "Challenging puzzle game." }
-        //};
+        [Authorize]
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
 
-        //private List<Review> reviews = new List<Review>
-        //{
-        //    new Review { Id = 1, GameId = 1, Rating = 5, Comment = "Amazing game!", ReviewerName = "Alice" },
-        //    new Review { Id = 2, GameId = 1, Rating = 4, Comment = "Very fun.", ReviewerName = "Bob" },
-        //    new Review { Id = 3, GameId = 2, Rating = 3.5, Comment = "Good but could be better.", ReviewerName = "Charlie" }
-        //};
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(Game game)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Games.Add(game);
+                _context.SaveChanges();
+                return RedirectToAction("List");
+            }
+            return View(game);
+        }
 
         public IActionResult List(string searchString, string genre, double? minRating, string sortOrder)
         {
@@ -79,6 +87,7 @@ namespace GameReviewWebsite.Controllers
             return View(game);
         }
 
+        [Authorize]
         [HttpPost]
         public IActionResult AddReview(int gameId, string reviewerName, double rating, string comment)
         {

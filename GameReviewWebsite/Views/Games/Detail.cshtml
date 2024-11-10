@@ -24,19 +24,26 @@ else
     <p>No reviews yet.</p>
 }   
 
-<h3>Add a Review</h3>
-<form method="post" action="@Url.Action("AddReview", "Games")">
-    <input type="hidden" name="GameId" value="@Model.Id" />
-    <label for="ReviewerName">Name:</label>
-    <input type="text" id="ReviewerName" name="ReviewerName" required /><br />
+@if (User.Identity.IsAuthenticated)
+{
+    <h3>Add a Review</h3>
+    <form method="post" action="@Url.Action("AddReview", "Games")">
+        <input type="hidden" name="GameId" value="@Model.Id" />
+        <label for="ReviewerName">Name:</label>
+        <input type="text" id="ReviewerName" name="ReviewerName" required /><br />
 
-    <label for="Rating">Rating:</label>
-    <input type="number" id="Rating" name="Rating" step="0.1" min="0" max="5" required /><br />
+        <label for="Rating">Rating:</label>
+        <input type="number" id="Rating" name="Rating" step="0.1" min="0" max="5" required /><br />
 
-    <label for="Comment">Comment:</label>
-    <textarea id="Comment" name="Comment" required></textarea><br />
+        <label for="Comment">Comment:</label>
+        <textarea id="Comment" name="Comment" required></textarea><br />
 
-    <button type="submit">Submit Review</button>
-</form>
+        <button type="submit">Submit Review</button>
+    </form>
+}
+else
+{
+    <p><a href="@Url.Page("/Account/Login", new { area = "Identity" })">Log in</a> to leave a review.</p>
+}
 
 <a href="@Url.Action("List", "Games")">Back to Game List</a>
