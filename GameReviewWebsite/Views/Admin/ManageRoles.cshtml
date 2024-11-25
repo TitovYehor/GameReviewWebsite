@@ -1,0 +1,27 @@
+﻿@model GameReviewWebsite.Models.ManageRolesViewModel
+
+@{
+    ViewData["Title"] = "Manage Roles";
+}
+
+<h2>Manage Roles for @Model.UserName</h2>
+
+<form asp-action="UpdateRoles" method="post">
+    <input type="hidden" asp-for="UserId" />
+
+    <div class="form-group">
+        @foreach (var role in Model.AllRoles)
+        {
+            <div class="form-check">
+                <input type="checkbox" asp-for="AssignedRoles" value="@role" 
+                       class="form-check-input" 
+                        />
+                @(Model.AssignedRoles.Contains(role) ? "checked" : "")
+                <label class="form-check-label" for="AssignedRoles">@role</label>
+            </div>
+        }
+    </div>
+
+    <button type="submit" class="btn btn-primary">Update Roles</button>
+    <a asp-action="Index" class="btn btn-secondary">Back to Users</a>
+</form>
