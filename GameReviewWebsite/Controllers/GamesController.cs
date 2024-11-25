@@ -41,7 +41,6 @@ namespace GameReviewWebsite.Controllers
         {
             var filteredGames = _context.Games.AsQueryable();
 
-            // Apply filters if any
             if (!string.IsNullOrEmpty(searchString))
             {
                 filteredGames = filteredGames.Where(g => g.Title.Contains(searchString, StringComparison.OrdinalIgnoreCase));
@@ -57,7 +56,6 @@ namespace GameReviewWebsite.Controllers
                 filteredGames = filteredGames.Where(g => g.Rating >= minRating.Value);
             }
 
-            // Sorting
             filteredGames = sortOrder switch
             {
                 "title_asc" => filteredGames.OrderBy(g => g.Title),
@@ -85,24 +83,6 @@ namespace GameReviewWebsite.Controllers
             ViewBag.Reviews = gameReviews;
 
             return View(game);
-        }
-
-        [Authorize]
-        [HttpPost]
-        public IActionResult AddReview(int gameId, string reviewerName, double rating, string comment)
-        {
-            var newReview = new Review
-            {
-                GameId = gameId,
-                ReviewerName = reviewerName,
-                Rating = rating,
-                Comment = comment
-            };
-
-            _context.Reviews.Add(newReview);
-            _context.SaveChanges();
-
-            return RedirectToAction("Detail", new { id = gameId });
         }
     }
 }

@@ -8,6 +8,8 @@
         public DateTime ReleaseDate { get; set; }
         public double Rating { get; set; }
         public string Description { get; set; }
+        public string Developer { get; set; }
 
+        public ICollection<Review> Reviews { get; set; } = new List<Review>();
     }
 }
