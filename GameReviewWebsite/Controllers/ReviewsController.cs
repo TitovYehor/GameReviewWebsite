@@ -20,12 +20,17 @@ namespace GameReviewWebsite.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddReview(int gameId, string title, string content, int rating)
         {
-            var userId = User?.Identity?.Name; 
+            var username = User?.Identity?.Name; 
 
-            if (string.IsNullOrEmpty(userId))
+            if (string.IsNullOrEmpty(username))
             {
                 return Unauthorized(); 
             }
+
+            var userId = _context.Users
+                .Where(u => u.UserName == username)
+                .Select(u => u.Id)
+                .FirstOrDefault();
 
             var newReview = new Review
             {
@@ -33,7 +38,11 @@ namespace GameReviewWebsite.Controllers
                 Content = content,
                 Rating = rating,
                 UserId = userId,
-                GameId = gameId
+                GameId = gameId,
+                UserNickname = _context.Users
+                    .Where(u => u.UserName == username)
+                    .Select(u => u.Nickname)
+                    .FirstOrDefault()
             };
 
             _context.Reviews.Add(newReview);

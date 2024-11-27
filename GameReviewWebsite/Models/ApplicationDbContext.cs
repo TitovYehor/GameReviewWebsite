@@ -14,6 +14,10 @@ namespace GameReviewWebsite.Models
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<ApplicationUser>()
+                .HasIndex(u => u.Nickname)
+                .IsUnique();
+
             modelBuilder.Entity<Review>()
                 .HasOne(r => r.Game)
                 .WithMany(g => g.Reviews)

@@ -11,10 +11,14 @@
 @if (ViewBag.Reviews != null && ViewBag.Reviews.Count > 0)
 {
     <ul>
-        @foreach (var review in ViewBag.Reviews)
+        @foreach (var review in (List<Review>)ViewBag.Reviews)
         {
             <li>
-                <p><strong>@review.Title</strong> (@review.Rating/5): @review.Content</p>
+                <p>
+                    <strong>@review.Title</strong> (@review.Rating/5): @review.Content
+                    <br />
+                    <em>by @review.UserNickname</em>
+                </p>
             </li>
         }
     </ul>
@@ -22,7 +26,7 @@
 else
 {
     <p>No reviews yet.</p>
-}   
+}
 
 @if (User.Identity.IsAuthenticated)
 {

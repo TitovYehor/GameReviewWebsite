@@ -11,6 +11,6 @@
 
 
         public Game Game { get; set; }
-
+        public string UserNickname { get; set; }
     }
 }

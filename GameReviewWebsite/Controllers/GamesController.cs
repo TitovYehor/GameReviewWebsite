@@ -79,10 +79,44 @@ namespace GameReviewWebsite.Controllers
                 return NotFound();
             }
 
-            var gameReviews = _context.Reviews.Where(r => r.GameId == id).ToList();
+            //var gameReviews = _context.Reviews.Where(r => r.GameId == id).ToList();
+            //var gameReviews = _context.Reviews
+            //    .Where(r => r.GameId == id)
+            //    .Select(r => new
+            //    {
+            //        r.Title,
+            //        r.Content,
+            //        r.Rating,
+            //        r.UserId,
+            //        r.UserNickname = _context.Users.Where(u => u.Id == r.UserId).Select(u => u.Nickname).FirstOrDefault()
+            //    })
+            //    .ToList();
+            var gameReviews = _context.Reviews
+                .Where(r => r.GameId == id)
+                .Select(r => new Review
+                {
+                    Id = r.Id,
+                    Title = r.Title,
+                    Content = r.Content,
+                    Rating = r.Rating,
+                    UserId = r.UserId,
+                    GameId = r.GameId,
+                    UserNickname = _context.Users
+                        .Where(u => u.Id == r.UserId)
+                        .Select(u => u.Nickname) 
+                        .FirstOrDefault()
+                })
+                .ToList();
+
             ViewBag.Reviews = gameReviews;
 
             return View(game);
         }
+    }
+
+    public class GameDetailViewModel
+    {
+        public Game Game { get; set; }
+        public List<Review> Reviews { get; set; }
     }
 }
