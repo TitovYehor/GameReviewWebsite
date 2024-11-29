@@ -79,18 +79,6 @@ namespace GameReviewWebsite.Controllers
                 return NotFound();
             }
 
-            //var gameReviews = _context.Reviews.Where(r => r.GameId == id).ToList();
-            //var gameReviews = _context.Reviews
-            //    .Where(r => r.GameId == id)
-            //    .Select(r => new
-            //    {
-            //        r.Title,
-            //        r.Content,
-            //        r.Rating,
-            //        r.UserId,
-            //        r.UserNickname = _context.Users.Where(u => u.Id == r.UserId).Select(u => u.Nickname).FirstOrDefault()
-            //    })
-            //    .ToList();
             var gameReviews = _context.Reviews
                 .Where(r => r.GameId == id)
                 .Select(r => new Review
@@ -109,6 +97,18 @@ namespace GameReviewWebsite.Controllers
                 .ToList();
 
             ViewBag.Reviews = gameReviews;
+
+            var username = User?.Identity?.Name;
+
+            if (!string.IsNullOrEmpty(username))
+            {
+                var userId = _context.Users
+                   .Where(u => u.UserName == username)
+                   .Select(u => u.Id)
+                   .FirstOrDefault();
+
+                ViewBag.UserId = userId;
+            }
 
             return View(game);
         }

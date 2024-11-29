@@ -1,5 +1,18 @@
 ﻿@model GameReviewWebsite.Models.Game
 
+@{
+    var reviews = ViewBag.Reviews as List<GameReviewWebsite.Models.Review>;
+
+    bool userHasReviewed = false;
+    var userId = ViewBag.UserId;
+    
+    if (userId != null && userId != String.Empty)
+    {
+        userHasReviewed = reviews != null &&
+                               reviews.Any(r => r.UserId == userId);
+    }
+}
+
 <h1>@Model.Title</h1>
 <p><strong>Genre:</strong> @Model.Genre</p>
 <p><strong>Release Date:</strong> @Model.ReleaseDate.ToString("yyyy-MM-dd")</p>
@@ -28,7 +41,7 @@ else
     <p>No reviews yet.</p>
 }
 
-@if (User.Identity.IsAuthenticated)
+@if (User.Identity.IsAuthenticated && !userHasReviewed)
 {
     <h3>Add a Review</h3>
     <form method="post" action="@Url.Action("AddReview", "Reviews")">
@@ -46,9 +59,13 @@ else
         <button type="submit">Submit Review</button>
     </form>
 }
-else
+else if (!User.Identity.IsAuthenticated)
 {
     <p><a href="@Url.Page("/Account/Login", new { area = "Identity" })">Log in</a> to leave a review.</p>
+}
+else if (userHasReviewed)
+{
+    <p>You have already reviewed this game.</p>
 }
 
 @if (TempData["Error"] != null)
