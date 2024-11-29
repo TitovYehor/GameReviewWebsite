@@ -32,6 +32,15 @@ namespace GameReviewWebsite.Controllers
                 .Select(u => u.Id)
                 .FirstOrDefault();
 
+            var existingReview = await _context.Reviews
+                .FirstOrDefaultAsync(r => r.GameId == gameId && r.UserId == userId);
+
+            if (existingReview != null)
+            {
+                TempData["Error"] = "You have already submitted a review for this game.";
+                return RedirectToAction("Detail", "Games", new { id = gameId });
+            }
+
             var newReview = new Review
             {
                 Title = title,

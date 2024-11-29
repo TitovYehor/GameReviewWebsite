@@ -38,7 +38,7 @@
             <td>@game.Title</td>
             <td>@game.Genre</td>
             <td>@game.ReleaseDate.ToString("yyyy-MM-dd")</td>
-            <td>@game.Rating</td>
+            <td>@(Math.Round(game.Rating * 2, MidpointRounding.AwayFromZero) / 2)</td>
             <td><a href="@Url.Action("Detail", "Games", new { id = game.Id })">View Details</a></td>
         </tr>
     }
